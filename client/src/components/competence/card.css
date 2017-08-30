@@ -4,7 +4,11 @@
 }
 
 .ui.cards>.editCompetence.card>.content>.header {
-    color: #0d71bb;
+     color: #0d71bb;
+ }
+
+.ui.cards>.competence.card>.content>.header p {
+    font-size: 0.8em;
 }
 
 .competence.card .icon {
