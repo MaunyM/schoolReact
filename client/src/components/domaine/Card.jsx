@@ -1,20 +1,22 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Card} from 'semantic-ui-react'
+import {Card, Icon} from 'semantic-ui-react'
 
 //Router
 import { push } from 'react-router-redux'
 
-import {openLicence} from '../../actions'
+import {removeDomaine} from '../../actions'
 
 import './card.css'
 
-const CompetenceCard = ({code, name, onAddClick, goTo}) => (
-    <Card className="domaine" onClick={event => goTo(`/domaine/${code}`)}>
+const CompetenceCard = ({_id, name, eleveId, progress, onRemoveClick, goTo}) => (
+    <Card className="domaine" link={true} >
         <Card.Content>
             <Card.Header>
-                {name}
+                <Icon name='trash' onClick={event => onRemoveClick(_id)}/>
+                <p onClick={event => goTo(`/eleve/${eleveId}/domaine/${_id}`)}>{name}</p>
             </Card.Header>
+            {Math.floor(progress)} %
         </Card.Content>
     </Card>
 );
@@ -22,8 +24,8 @@ const CompetenceCard = ({code, name, onAddClick, goTo}) => (
 export default connect(
     (state, ownProps) => ({}),
     dispatch => ({
-        onAddClick: (applicationId) => {
-            dispatch(openLicence(applicationId))
+        onRemoveClick: (code) => {
+            dispatch(removeDomaine(code))
         },
         goTo: url => {
             dispatch(push(url))

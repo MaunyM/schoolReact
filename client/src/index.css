@@ -4,6 +4,6 @@ body {
     font-family: sans-serif;
 }
 
-.content {
-    margin: 10px;
+#root {
+    height: 100%;
 }

@@ -1,22 +1,14 @@
-const defaultApplication = {
-    nom:'',
-    description:''
-};
+const defaultState =
+    {
+        domaine: {},
+        competence: {},
+        etape: {},
+        eleve: {}
+    };
 
-const defaultLicence = {
-    valeur:'',
-};
 
-const form = (state = {application:defaultApplication, licence:defaultLicence}, action) => {
+const form = (state = defaultState, action) => {
     switch (action.type) {
-        case 'OPEN_LICENCE':
-            return {
-                ...state,
-                licence: {
-                    ...state.licence,
-                    applicationId : action.applicationId
-                }
-            };
         case 'CHANGE_FIELD':
             return {
                 ...state,
@@ -28,7 +20,7 @@ const form = (state = {application:defaultApplication, licence:defaultLicence}, 
         case 'CANCEL_FORM':
             return {
                 ...state,
-                [action.form]: {...defaultApplication}
+                [action.form]: {...defaultState[action.form]}
             };
         default:
             return state

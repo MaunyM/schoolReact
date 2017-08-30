@@ -5,17 +5,22 @@
   "dependencies": {
     "babel-cli": "6.14.0",
     "babel-core": "6.14.0",
+    "babel-preset-es2015": "^6.24.1",
+    "body-parser": "^1.17.2",
     "express": "4.13.3",
     "fs": "0.0.2",
     "history": "^4.6.1",
+    "mongodb": "^2.2.28",
+    "mongoose": "^4.10.6",
     "react-router": "^4.1.1",
     "react-router-redux": "^5.0.0-alpha.6",
     "sql.js": "0.3.2"
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "babel-node server.js",
-    "client": "babel-node start-client.js",
+    "server": "node -r babel-register server.js",
+    "server debug": "node %NODE_DEBUG_OPTION% -r babel-register server.js",
+    "client": "node -r babel-register start-client.js",
     "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
     "lint": "eslint ."
   },

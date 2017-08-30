@@ -1,50 +1,45 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Card, Step} from 'semantic-ui-react'
+import {Card} from 'semantic-ui-react'
 
-import EtapeCard from './EtapeCard'
-
-//Router
-import {push} from 'react-router-redux'
+import EtapeCard from './Card'
+import EtapeEditCard from './EditCard'
+import SchoolStep from '../layout/Step';
 
 import './container.css'
 
-const filterByCompetence = (etapes, code) => {
-    return etapes.filter(etape => etape.codeCompetence === code)
-}
-
-const Container = ({competence, domaine, etapes, id, eleve, goTo}) => (
-        <div>
-            <Step.Group>
-                <Step icon='home' title={eleve.name} onClick={event => goTo('/')}/>
-                <Step icon='puzzle' title={domaine.name} onClick={event => goTo('/domaine/' + domaine.code)}/>
-                <Step title={competence.code}/>
-            </Step.Group>
-            <div>
-                <Card.Group>
-                    {filterByCompetence(etapes, competence.code).map(etape => <EtapeCard
-                        key={etape.code} {...etape}/>)}
-                </Card.Group>
-            </div>
-        </div>
-    )
-;
-
-const competenceFromCode = (state, code) => {
-    return state.competences.filter(competence => competence.code === code)[0]
+const filterByCompetence = (etapes, id) => {
+    return etapes.filter(etape => etape.competenceId === id)
 };
+
+const competenceFromId = (state, id) => {
+    return state.competences.filter(competence => competence._id === id)[0]
+};
+
+const EtapeContainer = ({competence, domaine, etapes, eleve}) => (
+    <div>
+        <SchoolStep eleve={eleve} competence={competence} domaine={domaine}/>
+        <div>
+            {competence &&
+            <Card.Group>
+                {
+                    filterByCompetence(etapes, competence._id).map(etape =>
+                        < EtapeCard key={etape._id} {...etape} eleve={eleve}/>)
+                }
+                <EtapeEditCard competence={competence}/>
+            </Card.Group>
+            }
+        </div>
+    </div>
+);
 
 export default connect(
     (state, ownProps) => ({
-        eleve: state.eleve,
-        id: ownProps.match.params.id,
-        domaine: state.domaines.filter(domaine => domaine.code === competenceFromCode(state, ownProps.match.params.id).codeDomaine)[0],
-        competence: competenceFromCode(state, ownProps.match.params.id),
+        eleve: state.eleves.filter(eleve => eleve._id === ownProps.match.params.idEleve)[0],
+        id: ownProps.match.params.idCompetence,
+        domaine: state.domaines.filter(domaine => domaine._id === competenceFromId(state, ownProps.match.params.idCompetence).domaineId)[0],
+        competence: competenceFromId(state, ownProps.match.params.idCompetence),
         etapes: state.etapes
     }),
-    dispatch => ({
-        goTo: url => {
-            dispatch(push(url))
-        }
-    })
-)(Container);
+    dispatch => ({})
+)(EtapeContainer);

@@ -17,9 +17,8 @@ import './index.css';
 import 'semantic-ui-css/semantic.min.css';
 
 //School
-import DomaineList from './components/domaine/Container';
-import EtapeList from './components/etape/Container';
-import CompetenceList from './components/competence/Container';
+import App from './components/App';
+
 import {rootEpic} from './actions';
 
 //Router
@@ -36,12 +35,8 @@ let store = createStore(schoolApp,
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <div className="content">
-                <Route exact path="/" component={DomaineList}/>
-                <Route path="/domaine/:id" component={CompetenceList}/>
-                <Route path="/competence/:id" component={EtapeList}/>
-            </div>
-        </ConnectedRouter >
+            <Route path="/" component={App}/>
+        </ConnectedRouter>
     </Provider>,
     document.getElementById('root')
 );

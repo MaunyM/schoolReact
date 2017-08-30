@@ -1,36 +1,43 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Card, Step} from 'semantic-ui-react'
-
-//Router
-import {push} from 'react-router-redux'
+import {Card} from 'semantic-ui-react'
 
 import CompetenceCard from './Card'
+import CompetenceEditCard from './EditCard'
+import SchoolStep from '../layout/Step';
 
 import './container.css'
 
-const DomaineContainer = ({domaine, competences, eleve, goTo}) => (
-        <div><Step.Group>
-            <Step icon='home' title={eleve.name}  onClick={event => goTo('/')}/>
-            <Step icon='puzzle' title={domaine.name}/>
-        </Step.Group>
-            <Card.Group>
-                {competences.map(competence => <CompetenceCard Card key={competence.code} {...competence}/>)}
-            </Card.Group>
-        </div>
-    )
-;
+const progress = (eleve, etapes) => {
+    const masteredEtapes = etapes.filter(etape => eleve.master.includes(etape._id))
+    return (100 / etapes.length) * masteredEtapes.length
+};
+
+const etapeFromCompetence = (competence, etapes) => {
+    return etapes.filter(etape => competence._id === etape.competenceId)
+};
+
+const CompetenceContainer = ({domaine, competences, etapes, eleve}) => (
+    <div>
+        <SchoolStep eleve={eleve} domaine={domaine}/>
+        <Card.Group>
+            {competences.map(competence => <CompetenceCard Card key={competence._id}
+                                                           eleveId={eleve && eleve._id}
+                                                           progress={eleve && progress(eleve, etapeFromCompetence(competence, etapes))}
+                                                           {...competence}/>)}
+            <CompetenceEditCard domaine={domaine}/>
+        </Card.Group>
+    </div>
+);
+
 
 export default connect(
     (state, ownProps) => ({
-        eleve : state.eleve,
-        id: ownProps.match.params.id,
-        domaine: state.domaines.filter(domaine => domaine.code === ownProps.match.params.id)[0],
-        competences: state.competences.filter(competence => competence.codeDomaine === ownProps.match.params.id)
+        eleve: state.eleves.filter(eleve => eleve._id === ownProps.match.params.idEleve)[0],
+        id: ownProps.match.params.idDomaine,
+        domaine: state.domaines.filter(domaine => domaine._id === ownProps.match.params.idDomaine)[0],
+        competences: state.competences.filter(competence => competence.domaineId === ownProps.match.params.idDomaine),
+        etapes: state.etapes
     }),
-    dispatch => ({
-        goTo: url => {
-            dispatch(push(url))
-        }
-    })
-)(DomaineContainer);
+    dispatch => ({})
+)(CompetenceContainer);
