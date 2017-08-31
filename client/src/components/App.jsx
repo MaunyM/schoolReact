@@ -15,7 +15,7 @@ import SchoolSynthese from './synthese/Synthese';
 
 import {loadEleves, loadDomaines, loadCompetences, loadEtapes} from '../actions'
 
-import {Sidebar, Segment} from 'semantic-ui-react'
+import {Sidebar, Segment, Message, Icon} from 'semantic-ui-react'
 
 import './app.css'
 
@@ -30,6 +30,15 @@ class AppContainer extends React.Component {
         const {hideSidebar} = this.props;
         return (
             <Sidebar.Pushable as={Segment}>
+                <Message>
+
+                    <Message.Header>      <Icon name='announcement'/>
+                        Nouveautés !
+                    </Message.Header>
+                    <p>
+                        Les formulaires se vident aprés validation
+                    </p>
+                </Message>
                 <div className="appContent" onClick={event => hideSidebar()}>
                     <SchoolSidebar/>
                     <Sidebar.Pusher>

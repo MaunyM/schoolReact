@@ -1,9 +1,9 @@
 const defaultState =
     {
-        domaine: {},
-        competence: {},
-        etape: {},
-        eleve: {}
+        domaine: {name: ""},
+        competence: {description: ""},
+        etape: {name: ""},
+        eleve: {name: ""}
     };
 
 

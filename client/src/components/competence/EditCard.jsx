@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
-import {addCompetence, changeField} from '../../actions'
+import {addCompetence, changeField, cancelForm} from '../../actions'
 
 import './card.css'
 
@@ -33,6 +33,7 @@ export default connect(
             dispatch(changeField('competence', name, value))
         },
         onEdit: (domaine, description) => {
+            dispatch(cancelForm('competence'));
             dispatch(addCompetence(domaine._id, description))
         }
     })

@@ -21,7 +21,8 @@ const CompetenceContainer = ({domaine, competences, etapes, eleve}) => (
     <div>
         <SchoolStep eleve={eleve} domaine={domaine}/>
         <Card.Group>
-            {competences.map(competence => <CompetenceCard Card key={competence._id}
+            {competences.map((competence, count) => <CompetenceCard Card
+                                                           key={count}
                                                            eleveId={eleve && eleve._id}
                                                            progress={eleve && progress(eleve, etapeFromCompetence(competence, etapes))}
                                                            {...competence}/>)}

@@ -15,7 +15,7 @@ const CompetenceCard = ({_id, eleveId, description, progress, onRemoveClick, goT
                 <Icon name='trash' onClick={event => onRemoveClick(_id)}/>
                 <p onClick={event => goTo(`/eleve/${eleveId}/competence/${_id}`)}>{description}</p>
             </Card.Header>
-            {Math.floor(progress)} %
+            {!isNaN(progress) && Math.floor(progress) +  " %"}
         </Card.Content>
     </Card>
 );

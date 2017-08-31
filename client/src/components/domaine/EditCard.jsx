@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
-import {addDomaine, changeField} from '../../actions'
+import {addDomaine, changeField, cancelForm} from '../../actions'
 
 import './editCard.css'
 
@@ -36,6 +36,7 @@ export default connect(
             dispatch(changeField('domaine', name, value))
         },
         onEdit: (name, code) => {
+            dispatch(cancelForm('domaine'));
             dispatch(addDomaine(name, code))
         }
     })

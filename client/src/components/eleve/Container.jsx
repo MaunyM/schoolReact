@@ -2,9 +2,10 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Card} from 'semantic-ui-react'
 
-import EleveCard from './Card'
+import SchoolCard from '../common/Card'
 import EleveEditCard from './EditCard'
 import SchoolStep from '../layout/Step';
+import {removeEleve} from '../../actions'
 
 import './container.css'
 
@@ -12,11 +13,16 @@ const progress = (eleve, etapes) => {
     return (100 / etapes.length) * eleve.master.length
 };
 
-const EleveContainer = ({eleves, etapes}) => (
+const EleveContainer = ({eleves, etapes, onRemoveClick}) => (
     <div>
         <SchoolStep/>
         <Card.Group>
-            {eleves.map((eleve) => <EleveCard key={eleve._id} progress={progress(eleve, etapes)} {...eleve}/>)}
+            {eleves.map((eleve, count) => <SchoolCard key={count}
+                                                      onRemoveClick={onRemoveClick}
+                                                      progress={eleve.master && progress(eleve, etapes)}
+                                                      header={eleve.name}
+                                                      _id={eleve._id}
+                                                      url={`eleve/${eleve._id}/domaines`}/>)}
             <EleveEditCard/>
         </Card.Group>
     </div>
@@ -27,5 +33,9 @@ export default connect(
         eleves: state.eleves,
         etapes: state.etapes
     }),
-    dispatch => ({})
+    dispatch => ({
+        onRemoveClick: (id) => {
+            dispatch(removeEleve(id))
+        },
+    })
 )(EleveContainer);

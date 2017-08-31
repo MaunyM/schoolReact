@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
-import {addEleve, changeField} from '../../actions'
+import {addEleve, changeField, cancelForm} from '../../actions'
 
 const EleveEditCard = ({edit, name, onChange, onEdit}) => (
     <Card>
@@ -32,7 +32,8 @@ export default connect(
             dispatch(changeField('eleve', name, value))
         },
         onEdit: (name) => {
-            dispatch(addEleve(name))
+            dispatch(addEleve(name));
+            dispatch(cancelForm('eleve'))
         }
     })
 )(EleveEditCard);

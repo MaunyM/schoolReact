@@ -2,30 +2,33 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Card} from 'semantic-ui-react'
 
-import DomaineCard from './Card'
+import SchoolCard from '../common/Card'
 import DomaineEditCard from './EditCard'
 import SchoolStep from '../layout/Step';
+import {removeDomaine} from '../../actions'
 
 import './container.css'
 
 const progress = (eleve, etapes) => {
-    const masteredEtapes = etapes.filter( etape => eleve.master.includes(etape._id))
+    const masteredEtapes = etapes.filter(etape => eleve.master.includes(etape._id))
     return (100 / etapes.length) * masteredEtapes.length
 };
 
 const etapeFromDomaine = (domaine, competences, etapes) => {
-    const competencesId = competences.filter( competence => competence.domaineId === domaine._id).map(competence => competence._id);
+    const competencesId = competences.filter(competence => competence.domaineId === domaine._id).map(competence => competence._id);
     return etapes.filter(etape => competencesId.includes(etape.competenceId))
 };
 
-const DomaineContainer = ({domaines, eleve, competences, etapes}) => (
+const DomaineContainer = ({domaines, eleve, competences, onRemoveClick, etapes}) => (
     <div>
         <SchoolStep eleve={eleve}/>
         <Card.Group>
-            {domaines.map((domaine) => <DomaineCard key={domaine._id}
-                                                    eleveId={eleve && eleve._id}
-                                                    progress={eleve && progress(eleve, etapeFromDomaine(domaine, competences, etapes))}
-                                                    {...domaine}/>)}
+            {domaines.map((domaine, count) => <SchoolCard key={count}
+                                                   onRemoveClick={onRemoveClick}
+                                                   progress={eleve && progress(eleve, etapeFromDomaine(domaine, competences, etapes))}
+                                                   header={domaine.name}
+                                                   _id={domaine._id}
+                                                   url={`/eleve/${eleve._id}/domaine/${domaine._id}`}/>)}
             <DomaineEditCard/>
         </Card.Group>
     </div>
@@ -39,5 +42,9 @@ export default connect(
         competences: state.competences,
         etapes: state.etapes
     }),
-    dispatch => ({})
+    dispatch => ({
+        onRemoveClick: (code) => {
+            dispatch(removeDomaine(code))
+        }
+    })
 )(DomaineContainer);

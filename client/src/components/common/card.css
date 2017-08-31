@@ -1,0 +1,22 @@
+.schoolCard.card {
+    text-align: center;
+    height: 106px;
+}
+
+.schoolCard.card .icon {
+    display: none;
+}
+
+.schoolCard.card:hover .icon {
+    display: inline;
+    position: absolute;
+    right: 10px;
+    color: darkgrey;
+}
+
+.schoolCard.card .icon:hover {
+    display: inline;
+    position: fixed;
+    right: 10px;
+    color: black;
+}
