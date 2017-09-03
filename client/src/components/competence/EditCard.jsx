@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
 import {addCompetence, changeField, cancelForm} from '../../actions'
 
-import './card.css'
+import './editCard.css'
 
 const CompetenceEditCard = ({domaine, description, onEdit, onChange}) => (
     <Card className="editCompetence">

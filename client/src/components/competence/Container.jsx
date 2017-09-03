@@ -2,9 +2,13 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Card} from 'semantic-ui-react'
 
-import CompetenceCard from './Card'
+//Router
+import {push} from 'react-router-redux'
+
+import SchoolCard from '../common/Card'
 import CompetenceEditCard from './EditCard'
 import SchoolStep from '../layout/Step';
+import {removeCompetence} from '../../actions'
 
 import './container.css'
 
@@ -17,15 +21,18 @@ const etapeFromCompetence = (competence, etapes) => {
     return etapes.filter(etape => competence._id === etape.competenceId)
 };
 
-const CompetenceContainer = ({domaine, competences, etapes, eleve}) => (
-    <div>
+const CompetenceContainer = ({domaine, competences, etapes, eleve, onRemoveClick, goTo}) => (
+    <div className="competence">
         <SchoolStep eleve={eleve} domaine={domaine}/>
         <Card.Group>
-            {competences.map((competence, count) => <CompetenceCard Card
-                                                           key={count}
-                                                           eleveId={eleve && eleve._id}
-                                                           progress={eleve && progress(eleve, etapeFromCompetence(competence, etapes))}
-                                                           {...competence}/>)}
+            {competences.map((competence, count) =>
+                <SchoolCard key={count}
+                            onRemoveClick={onRemoveClick}
+                            progress={eleve && progress(eleve, etapeFromCompetence(competence, etapes))}
+                            header={competence.description}
+                            _id={eleve._id}
+                            onClick={() => goTo(`/eleve/${eleve && eleve._id}/competence/${competence._id}`)}/>)
+            }
             <CompetenceEditCard domaine={domaine}/>
         </Card.Group>
     </div>
@@ -40,5 +47,12 @@ export default connect(
         competences: state.competences.filter(competence => competence.domaineId === ownProps.match.params.idDomaine),
         etapes: state.etapes
     }),
-    dispatch => ({})
+    dispatch => ({
+        goTo: url => {
+            dispatch(push(url))
+        },
+        onRemoveClick: (id) => {
+            dispatch(removeCompetence(id))
+        }
+    })
 )(CompetenceContainer);

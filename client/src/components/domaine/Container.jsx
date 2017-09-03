@@ -23,7 +23,7 @@ const etapeFromDomaine = (domaine, competences, etapes) => {
 };
 
 const DomaineContainer = ({domaines, eleve, competences, onRemoveClick, goTo, etapes}) => (
-    <div>
+    <div >
         <SchoolStep eleve={eleve}/>
         <Card.Group>
             {domaines.map((domaine, count) => <SchoolCard key={count}

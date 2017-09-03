@@ -1,0 +1,8 @@
+.competence .schoolCard {
+    text-align: center;
+    height: 126px;
+}
+
+.competence  .ui.cards>.card>.content>.header p {
+    font-size: 0.8em;
+}
