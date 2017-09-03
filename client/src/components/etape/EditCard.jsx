@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
-import {addEtape, changeField} from '../../actions'
+import {addEtape, changeField, cancelForm} from '../../actions'
 
 const EtapeEditCard = ({edit, competence, description, onChange, onEdit}) => (
     <Card className="editEtape">
@@ -31,6 +31,7 @@ export default connect(
             dispatch(changeField('etape', name, value))
         },
         onEdit: (competence, description) => {
+            dispatch(cancelForm('etape'));
             dispatch(addEtape(competence._id, description))
         }
     })

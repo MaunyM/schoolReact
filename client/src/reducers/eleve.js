@@ -1,11 +1,4 @@
-const initialEleve =
-    {
-        name: "Maxime",
-        master: []
-    }
-;
-
-const eleve = (state = initialEleve, action) => {
+const eleve = (state = {}, action) => {
     switch (action.type) {
         case 'ADD_ELEVE':
             return {

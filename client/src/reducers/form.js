@@ -2,7 +2,7 @@ const defaultState =
     {
         domaine: {name: ""},
         competence: {description: ""},
-        etape: {name: ""},
+        etape: {description: ""},
         eleve: {name: ""}
     };
 

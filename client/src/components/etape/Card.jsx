@@ -10,11 +10,11 @@ const hasCompetence = (eleve, id) => {
     return eleve && eleve.master.includes(id);
 };
 
-const CompetenceCard = ({_id, description, onCompetenceClicked, isMastered, eleve}) => (
+const CompetenceCard = ({_id, description, onCompetenceClicked, isMastered, eleve, color}) => (
     <Card onClick={event => onCompetenceClicked(_id, eleve)} color={hasCompetence(eleve, _id) ? "green" : "red"}>
         <Card.Content>
             <Card.Header>
-                {description}
+                <p>{description}</p>
             </Card.Header>
             <Card.Description>
             </Card.Description>

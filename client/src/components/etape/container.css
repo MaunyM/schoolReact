@@ -1,0 +1,12 @@
+.ui.cards > .editEtape.card > .content > .header {
+    color: #AE800A;
+}
+
+.etape .schoolCard {
+    text-align: center;
+    height: 125px;
+}
+
+.etape .ui.cards>.card>.content>.header p {
+    font-size: 0.8em;
+}

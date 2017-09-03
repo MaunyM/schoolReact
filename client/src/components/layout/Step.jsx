@@ -10,8 +10,8 @@ import './step.css'
 const SchoolStep = ({competence, domaine, eleve, goTo}) => (
     <Step.Group>
         {eleve ?
-            <Step icon='home' onClick={event => goTo('/')}/>
-            : <Step icon='home'/>
+            <Step icon='edit' onClick={event => goTo('/')}/>
+            : <Step icon='edit'/>
         }
         {
             eleve && (domaine ?

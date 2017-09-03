@@ -2,6 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Card} from 'semantic-ui-react'
 
+//Router
+import {push} from 'react-router-redux'
+
 import SchoolCard from '../common/Card'
 import DomaineEditCard from './EditCard'
 import SchoolStep from '../layout/Step';
@@ -19,16 +22,16 @@ const etapeFromDomaine = (domaine, competences, etapes) => {
     return etapes.filter(etape => competencesId.includes(etape.competenceId))
 };
 
-const DomaineContainer = ({domaines, eleve, competences, onRemoveClick, etapes}) => (
+const DomaineContainer = ({domaines, eleve, competences, onRemoveClick, goTo, etapes}) => (
     <div>
         <SchoolStep eleve={eleve}/>
         <Card.Group>
             {domaines.map((domaine, count) => <SchoolCard key={count}
-                                                   onRemoveClick={onRemoveClick}
-                                                   progress={eleve && progress(eleve, etapeFromDomaine(domaine, competences, etapes))}
-                                                   header={domaine.name}
-                                                   _id={domaine._id}
-                                                   url={`/eleve/${eleve._id}/domaine/${domaine._id}`}/>)}
+                                                          onRemoveClick={onRemoveClick}
+                                                          progress={eleve && progress(eleve, etapeFromDomaine(domaine, competences, etapes))}
+                                                          header={domaine.name}
+                                                          _id={domaine._id}
+                                                          onClick={() => goTo(`/eleve/${eleve._id}/domaine/${domaine._id}`)}/>)}
             <DomaineEditCard/>
         </Card.Group>
     </div>
@@ -43,6 +46,9 @@ export default connect(
         etapes: state.etapes
     }),
     dispatch => ({
+        goTo: url => {
+            dispatch(push(url))
+        },
         onRemoveClick: (code) => {
             dispatch(removeDomaine(code))
         }

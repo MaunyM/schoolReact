@@ -20,3 +20,15 @@
     right: 10px;
     color: black;
 }
+
+.schoolCard.card .progressFull {
+    color: green;
+}
+
+.schoolCard.card .progressMiddle {
+    color: darkorange;
+}
+
+.schoolCard.card .progressEmpty {
+    color: red;
+}

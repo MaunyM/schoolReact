@@ -2,6 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Card} from 'semantic-ui-react'
 
+//Router
+import {push} from 'react-router-redux'
+
 import SchoolCard from '../common/Card'
 import EleveEditCard from './EditCard'
 import SchoolStep from '../layout/Step';
@@ -13,7 +16,7 @@ const progress = (eleve, etapes) => {
     return (100 / etapes.length) * eleve.master.length
 };
 
-const EleveContainer = ({eleves, etapes, onRemoveClick}) => (
+const EleveContainer = ({eleves, etapes, onRemoveClick, goTo}) => (
     <div>
         <SchoolStep/>
         <Card.Group>
@@ -22,7 +25,8 @@ const EleveContainer = ({eleves, etapes, onRemoveClick}) => (
                                                       progress={eleve.master && progress(eleve, etapes)}
                                                       header={eleve.name}
                                                       _id={eleve._id}
-                                                      url={`eleve/${eleve._id}/domaines`}/>)}
+                                                      onClick={() => goTo(`eleve/${eleve._id}/domaines`)}/>)
+            }
             <EleveEditCard/>
         </Card.Group>
     </div>
@@ -34,6 +38,9 @@ export default connect(
         etapes: state.etapes
     }),
     dispatch => ({
+        goTo: url => {
+            dispatch(push(url))
+        },
         onRemoveClick: (id) => {
             dispatch(removeEleve(id))
         },

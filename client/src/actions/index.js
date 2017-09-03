@@ -16,6 +16,7 @@ export const competencesLoaded = (competences) => ({type: 'COMPETENCES_LOADED', 
 
 export const loadEtapes = () => ({type: 'LOAD_ETAPES'});
 export const addEtape = (competenceId, description) => ({type: 'ADD_ETAPE', description, competenceId});
+export const removeEtape = (id) => ({type: 'REMOVE_ETAPE', id});
 export const etapesLoaded = (etapes) => ({type: 'ETAPES_LOADED', etapes});
 
 export const loadEleves = () => ({type: 'LOAD_ELEVES'});
