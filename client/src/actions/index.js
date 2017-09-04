@@ -23,7 +23,7 @@ export const loadEleves = () => ({type: 'LOAD_ELEVES'});
 export const addEleve = (name) => ({type: 'ADD_ELEVE', name});
 export const elevesLoaded = (eleves) => ({type: 'ELEVES_LOADED', eleves});
 export const removeEleve = (id) => ({type: 'REMOVE_ELEVE', id});
-export const updateEleve = ( eleve) => ({type: 'UPDATE_ELEVE', eleve});
+export const updateEleve = (eleve) => ({type: 'UPDATE_ELEVE', eleve});
 
 //Navigation
 export const showSidebar = () => ({type: 'SIDEBAR_SHOW'});
@@ -98,11 +98,21 @@ const removeEtapeEpic = action$ =>
                 .map(response => loadEtapes())
         );
 
+const cmp = (a, b) => {
+    if (a < b) {
+        return -1;
+    }
+    if (a > b) {
+        return 1;
+    }
+    return 0;
+};
+
 const fetchEleveEpic = action$ =>
     action$.ofType('LOAD_ELEVES')
         .mergeMap(action =>
             ajax.getJSON(`/api/eleves/`)
-                .map(response => elevesLoaded(response))
+                .map(response => elevesLoaded(response.sort((eleveA, eleveB) => cmp(eleveA.name, eleveB.name))))
         );
 
 const postEleveEpic = action$ =>

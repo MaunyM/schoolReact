@@ -36,7 +36,7 @@ class AppContainer extends React.Component {
                         Nouveautés !
                     </Message.Header>
                     <p>
-                        Les formulaires se vident aprés validation
+                        Les élèves sont classés par ordre alphabétique
                     </p>
                 </Message>
                 <div className="appContent" onClick={event => hideSidebar()}>
