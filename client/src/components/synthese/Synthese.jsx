@@ -1,6 +1,6 @@
 import React from 'react'
 
-import SchoolProgressCell from './ProgressCell'
+import SchoolProgress from '../common/Progress'
 
 import {Label, Table} from 'semantic-ui-react'
 
@@ -36,7 +36,7 @@ const SchoolSynthese = ({eleves, domaines, competences, etapes}) => (
                     </Table.Cell>
                     {domaines.map(domaine =>
                         <Table.Cell key={domaine._id}>
-                            <SchoolProgressCell
+                            <SchoolProgress
                                 progress={progress(eleve, etapeFromDomaine(domaine, competences, etapes))}/>
                         </Table.Cell>
                     )}

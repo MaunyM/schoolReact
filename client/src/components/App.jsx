@@ -32,11 +32,12 @@ class AppContainer extends React.Component {
             <Sidebar.Pushable as={Segment}>
                 <Message>
 
-                    <Message.Header>      <Icon name='announcement'/>
+                    <Message.Header>
+                        <Icon name='announcement'/>
                         Nouveautés !
                     </Message.Header>
                     <p>
-                        Les élèves sont classés par ordre alphabétique
+                        L'ecran de synthese affiche les domaines
                     </p>
                 </Message>
                 <div className="appContent" onClick={event => hideSidebar()}>

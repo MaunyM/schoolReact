@@ -2,13 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Icon} from 'semantic-ui-react'
 
-import './card.css'
+import SchoolProgress from './Progress'
 
-const progressStyle = (progress) => {
-    if (progress === 100) return "progressFull";
-    if (progress > 50) return "progressMiddle";
-    return "progressEmpty";
-};
+import './card.css'
 
 const SchoolCard = ({_id, url, header, progress, color, onRemoveClick, onClick}) => (
     <Card className="schoolCard" link={true} onClick={event => onClick()} color={color}>
@@ -20,7 +16,7 @@ const SchoolCard = ({_id, url, header, progress, color, onRemoveClick, onClick})
                 }}/>
                 <p>{header}</p>
             </Card.Header>
-            <span className={progressStyle(progress)}> {!isNaN(progress) && Math.floor(progress) + " %"} </span>
+            <SchoolProgress progress={progress}/>
         </Card.Content>
     </Card>
 );
