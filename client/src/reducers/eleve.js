@@ -30,11 +30,6 @@ const eleves = (state = [], action) => {
                 ...state,
                 eleve({}, action)
             ];
-        case 'UPDATE_ELEVE':
-            return [
-                ...state.filter(eleve => eleve._id !== action.eleve._id),
-               action.eleve
-            ];
         case 'ELEVES_LOADED':
             return action.eleves;
         default :
