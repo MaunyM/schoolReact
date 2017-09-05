@@ -1,8 +1,6 @@
 import React from 'react'
 
-import SchoolProgress from '../common/Progress'
-
-import {Label, Table} from 'semantic-ui-react'
+import SchoolSynthese from '../common/Synthese'
 
 import {connect} from 'react-redux'
 
@@ -20,35 +18,13 @@ const etapeFromCompetence = (competence, etapes) => {
 
 
 const SchoolSyntheseDomaine = ({eleves, domaines, competences, etapes, goTo}) => (
-    <Table celled>
-        <Table.Header>
-            <Table.Row>
-                <Table.HeaderCell/>
-                {competences.map(competence =>
-                    <Table.HeaderCell key={competence._id}>
-                        <a onClick={event => goTo(`/synthese/competence/${competence._id}`)} className="link">
-                            {competence.description}
-                        </a>
-                    </Table.HeaderCell>
-                )}
-            </Table.Row>
-        </Table.Header>
+    <SchoolSynthese columns={competences}
+                    columnRender={competence => competence.description}
+                    progress={(eleve, competence) => progress(eleve, etapeFromCompetence(competence, etapes))}
+                    onColumnClick={competence => goTo(`/synthese/competence/${competence._id}`)}
+                    onCellClick={(eleve, competence) => goTo(`/eleve/${eleve._id}/competence/${competence._id}`)}
 
-        <Table.Body>
-            {eleves.map(eleve =>
-                <Table.Row key={eleve._id}>
-                    <Table.Cell collapsing>
-                        <Label ribbon>{eleve.name}</Label>
-                    </Table.Cell>
-                    {competences.map(competence =>
-                        <Table.Cell key={competence._id}>
-                            <SchoolProgress
-                                progress={progress(eleve, etapeFromCompetence(competence, etapes))}/>
-                        </Table.Cell>
-                    )}
-                </Table.Row>)}
-        </Table.Body>
-    </Table>
+    />
 );
 
 export default connect(

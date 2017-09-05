@@ -11,7 +11,7 @@ import EtapeList from './etape/Container';
 import CompetenceList from './competence/Container';
 import SchoolHeader from './layout/Header';
 import SchoolSidebar from './layout/Sidebar';
-import SchoolSynthese from './synthese/Synthese';
+import SchoolSyntheseHome from './synthese/SyntheseHome';
 import SchoolSyntheseDomaine from './synthese/SyntheseDomaine';
 import SchoolSyntheseCompetence from './synthese/SyntheseCompetence';
 
@@ -47,7 +47,7 @@ class AppContainer extends React.Component {
                     <Sidebar.Pusher>
                         <SchoolHeader/>
                         <Route exact path="/" component={EleveList}/>
-                        <Route exact path="/synthese" component={SchoolSynthese}/>
+                        <Route exact path="/synthese" component={SchoolSyntheseHome}/>
                         <Route path="/synthese/domaine/:idDomaine" component={SchoolSyntheseDomaine}/>
                         <Route path="/synthese/competence/:idCompetence" component={SchoolSyntheseCompetence}/>
                         <Route path="/eleve/:idEleve/domaines" component={DomaineList}/>
