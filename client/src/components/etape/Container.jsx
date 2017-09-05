@@ -10,10 +10,6 @@ import {removeEtape, updateEleve} from '../../actions'
 
 import './container.css'
 
-const filterByCompetence = (etapes, id) => {
-    return etapes.filter(etape => etape.competenceId === id)
-};
-
 const competenceFromId = (state, id) => {
     return state.competences.filter(competence => competence._id === id)[0]
 };
@@ -21,8 +17,6 @@ const competenceFromId = (state, id) => {
 const hasCompetence = (eleve, id) => {
     return eleve && eleve.master.includes(id);
 };
-
-
 const EtapeContainer = ({competence, domaine, etapes, eleve, onEtapeClicked, onRemoveClick}) => (
     <div className="etape">
         <SchoolStep eleve={eleve} competence={competence} domaine={domaine}/>
@@ -30,7 +24,7 @@ const EtapeContainer = ({competence, domaine, etapes, eleve, onEtapeClicked, onR
             {competence &&
             <Card.Group>
                 {
-                    filterByCompetence(etapes, competence._id).map((etape, count) =>
+                    etapes.map((etape, count) =>
                         <SchoolCard key={count}
                                     onRemoveClick={onRemoveClick}
                                     onClick={() => onEtapeClicked(etape._id, eleve)}
@@ -53,7 +47,7 @@ export default connect(
         id: ownProps.match.params.idCompetence,
         domaine: state.domaines.filter(domaine => domaine._id === competenceFromId(state, ownProps.match.params.idCompetence).domaineId)[0],
         competence: competenceFromId(state, ownProps.match.params.idCompetence),
-        etapes: state.etapes
+        etapes: state.etapes.filter(etape => etape.competenceId === ownProps.match.params.idCompetence)
     }),
     dispatch => ({
         onEtapeClicked: (id, eleve) => {

@@ -4,6 +4,9 @@ import SchoolProgress from '../common/Progress'
 
 import {Label, Table} from 'semantic-ui-react'
 
+//Router
+import {push} from 'react-router-redux'
+
 import {connect} from 'react-redux'
 
 const progress = (eleve, etapes) => {
@@ -17,13 +20,15 @@ const etapeFromDomaine = (domaine, competences, etapes) => {
 };
 
 
-const SchoolSynthese = ({eleves, domaines, competences, etapes}) => (
+const SchoolSynthese = ({eleves, domaines, competences, etapes, goTo}) => (
     <Table celled>
         <Table.Header>
             <Table.Row>
                 <Table.HeaderCell></Table.HeaderCell>
                 {domaines.map(domaine =>
-                    <Table.HeaderCell key={domaine._id}>{domaine.name}</Table.HeaderCell>
+                    <Table.HeaderCell key={domaine._id}>
+                        <a onClick={event => goTo(`synthese/domaine/${domaine._id}`)}  className="link"> {domaine.name}</a>
+                    </Table.HeaderCell>
                 )}
             </Table.Row>
         </Table.Header>
@@ -36,8 +41,10 @@ const SchoolSynthese = ({eleves, domaines, competences, etapes}) => (
                     </Table.Cell>
                     {domaines.map(domaine =>
                         <Table.Cell key={domaine._id}>
+                            <a onClick={event => goTo(`eleve/${eleve._id}/domaine/${domaine._id}`)}  className="link">
                             <SchoolProgress
                                 progress={progress(eleve, etapeFromDomaine(domaine, competences, etapes))}/>
+                            </a>
                         </Table.Cell>
                     )}
                 </Table.Row>)}
@@ -52,5 +59,9 @@ export default connect(
         competences: state.competences,
         etapes: state.etapes
     }),
-    dispatch => ({})
+    dispatch => ({
+        goTo: url => {
+            dispatch(push(url))
+        }
+    })
 )(SchoolSynthese);
