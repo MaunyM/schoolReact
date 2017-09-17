@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {Route} from 'react-router'
 import {push} from 'react-router-redux'
 
-import {hideSidebar} from '../actions'
+import {hideSidebar, me} from '../actions'
 
 import DomaineList from './domaine/Container';
 import EleveList from './eleve/Container';
@@ -26,8 +26,14 @@ import './app.css'
 
 class AppContainer extends React.Component {
     componentWillMount() {
-        const {load} = this.props;
+        const {load, goTo, me} = this.props;
         load();
+        const token = sessionStorage.getItem('jwtToken');
+        if (token) {
+            me(token)
+        }else {
+            goTo('/login')
+        }
     }
 
     render() {
@@ -69,6 +75,9 @@ export default connect(
         },
         goTo: url => {
             dispatch(push(url))
+        },
+        me: token => {
+            dispatch(me(token))
         }
     })
 )(AppContainer);

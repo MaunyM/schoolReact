@@ -14,11 +14,9 @@ import './app.css'
 
 class AppContainer extends React.Component {
     componentWillMount() {
-        const {goTo, me} = this.props;
+        const {goTo} = this.props;
         const token = sessionStorage.getItem('jwtToken');
-        if (token) {
-            me(token)
-        } else {
+        if (!token) {
             goTo('/login')
         }
     }
@@ -39,9 +37,6 @@ export default connect(
     dispatch => ({
         goTo: url => {
             dispatch(push(url))
-        },
-        me: token => {
-            dispatch(me(token))
         }
     })
 )(AppContainer);
