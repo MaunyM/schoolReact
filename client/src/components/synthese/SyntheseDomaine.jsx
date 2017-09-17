@@ -21,8 +21,8 @@ const SchoolSyntheseDomaine = ({eleves, domaines, competences, etapes, goTo}) =>
     <SchoolSynthese columns={competences}
                     columnRender={competence => competence.description}
                     progress={(eleve, competence) => progress(eleve, etapeFromCompetence(competence, etapes))}
-                    onColumnClick={competence => goTo(`/synthese/competence/${competence._id}`)}
-                    onCellClick={(eleve, competence) => goTo(`/eleve/${eleve._id}/competence/${competence._id}`)}
+                    onColumnClick={competence => goTo(`/home/synthese/competence/${competence._id}`)}
+                    onCellClick={(eleve, competence) => goTo(`/home/eleve/${eleve._id}/competence/${competence._id}`)}
 
     />
 );

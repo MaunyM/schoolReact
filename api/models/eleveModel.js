@@ -4,6 +4,7 @@ const endPoint = 'eleves';
 
 const ElevesSchema = {
     name: String,
+    userId: String,
     master: [String]
 };
 

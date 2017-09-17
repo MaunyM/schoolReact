@@ -1,18 +1,24 @@
 require("babel-register");
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');
+
+const jwt = require('./jwt');
 
 const Domaine = require('./api/models/domaineModel');
 const Competence = require('./api/models/competenceModel');
 const Etape = require('./api/models/etapeModel');
 const Eleve = require('./api/models/eleveModel');
+const User = require('./api/models/userModel');
+
 
 const Controller = require('./api/controllers/controller');
+const EleveController = require('./api/controllers/eleveController');
+const UserController = require('./api/controllers/userController');
 const DomainesController = Controller.bind(Domaine.Model);
 const CompetencesController = Controller.bind(Competence.Model);
 const EtapesController = Controller.bind(Etape.Model);
-const ElevesController = Controller.bind(Eleve.Model);
+const ElevesController = EleveController.bindEleve(Eleve.Model);
+const UsersController = UserController.bindUser(User.Model);
 
 //MONGODB_URI in injected by Heroku
 let mongooseUri = process.env.MONGODB_URI ? process.env.MONGODB_URI : "mongodb://127.0.0.1/test";
@@ -25,6 +31,7 @@ const app = express();
 
 app.set('port', (process.env.PORT || 3001));
 app.use(bodyParser.json());
+app.use(jwt.verify);
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -46,6 +53,10 @@ adddRoute(app, DomainesController);
 adddRoute(app, CompetencesController);
 adddRoute(app, EtapesController);
 adddRoute(app, ElevesController);
+app.route(`/api/${UsersController.resource.endpoint}/signup`).post(UsersController.signup);
+app.route(`/api/${UsersController.resource.endpoint}/signin`).post(UsersController.signin);
+app.route(`/api/${UsersController.resource.endpoint}/me`).get(UsersController.me);
+adddRoute(app, UsersController);
 
 app.listen(app.get('port'), () => {
     console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console

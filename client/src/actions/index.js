@@ -1,7 +1,11 @@
 import {ajax} from 'rxjs/observable/dom/ajax';
 import {combineEpics} from 'redux-observable';
+import {push} from 'react-router-redux'
+
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/catch'
+import {of} from 'rxjs/observable/of'
 
 
 export const loadDomaines = () => ({type: 'LOAD_DOMAINES'});
@@ -20,7 +24,7 @@ export const removeEtape = (id) => ({type: 'REMOVE_ETAPE', id});
 export const etapesLoaded = (etapes) => ({type: 'ETAPES_LOADED', etapes});
 
 export const loadEleves = () => ({type: 'LOAD_ELEVES'});
-export const addEleve = (name) => ({type: 'ADD_ELEVE', name});
+export const addEleve = (name, userId) => ({type: 'ADD_ELEVE', name, userId});
 export const elevesLoaded = (eleves) => ({type: 'ELEVES_LOADED', eleves});
 export const removeEleve = (id) => ({type: 'REMOVE_ELEVE', id});
 export const updateEleve = (eleve) => ({type: 'UPDATE_ELEVE', eleve});
@@ -33,68 +37,89 @@ export const hideSidebar = () => ({type: 'SIDEBAR_HIDE'});
 export const changeField = (form, field, value) => ({type: 'CHANGE_FIELD', form, value, field});
 export const cancelForm = (form) => ({type: 'CANCEL_FORM', form});
 
+//User
+export const signIn = (name, password) => ({type: 'SIGN_IN', name, password});
+export const signUp = (name, password) => ({type: 'SIGN_UP', name, password});
+export const signInOk = (user, token) => ({type: 'SIGN_IN_OK', user, token});
+export const signInKo = () => ({type: 'SIGN_IN_KO'});
+export const signOut = () => ({type: 'SIGN_OUT'});
+export const me = (token) => ({type: 'ME', token});
+export const meLoaded = (user) => ({type: 'ME_LOADED', user});
+
+const headers = () => {
+    return {
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${sessionStorage.getItem('jwtToken')}`
+    }
+};
+
+
 // epic
 const fetchDomaineEpic = action$ =>
     action$.ofType('LOAD_DOMAINES')
         .mergeMap(action =>
-            ajax.getJSON(`/api/domaines/`)
-                .map(response => domainesLoaded(response))
+            ajax.getJSON(
+                `/api/domaines/`, headers()
+            ).map(response => domainesLoaded(response))
         );
 
 
 const postDomaineEpic = action$ =>
     action$.ofType('ADD_DOMAINE')
         .mergeMap(action =>
-            ajax.post(`/api/domaines/`, action, {'Content-Type': 'application/json'})
+            ajax.post(`/api/domaines/`, headers())
                 .map(response => loadDomaines())
         );
 
 const removeDomaineEpic = action$ =>
     action$.ofType('REMOVE_DOMAINE')
         .mergeMap(action =>
-            ajax.delete(`/api/domaines/${action.id}`, action, {'Content-Type': 'application/json'})
+            ajax.delete(`/api/domaines/${action.id}`, headers())
                 .map(response => loadDomaines())
         );
 
 const fetchCompetenceEpic = action$ =>
     action$.ofType('LOAD_COMPETENCES')
         .mergeMap(action =>
-            ajax.getJSON(`/api/competences/`)
-                .map(response => competencesLoaded(response))
+            ajax.getJSON(
+                `/api/competences/`, headers()
+            ).map(response => competencesLoaded(response))
         );
 
 const postCompetenceEpic = action$ =>
     action$.ofType('ADD_COMPETENCE')
         .mergeMap(action =>
-            ajax.post(`/api/competences/`, action, {'Content-Type': 'application/json'})
+            ajax.post(`/api/competences/`, action, headers())
                 .map(response => loadCompetences())
         );
 
 const removeCompetenceEpic = action$ =>
     action$.ofType('REMOVE_COMPETENCE')
         .mergeMap(action =>
-            ajax.delete(`/api/competences/${action.id}`, action, {'Content-Type': 'application/json'})
+            ajax.delete(`/api/competences/${action.id}`, headers())
                 .map(response => loadCompetences())
         );
 
 const fetchEtapeEpic = action$ =>
     action$.ofType('LOAD_ETAPES')
         .mergeMap(action =>
-            ajax.getJSON(`/api/etapes/`)
-                .map(response => etapesLoaded(response))
+            ajax.getJSON(
+                `/api/etapes/`, headers()
+            ).map(response => etapesLoaded(response))
         );
+
 
 const postEtapeEpic = action$ =>
     action$.ofType('ADD_ETAPE')
         .mergeMap(action =>
-            ajax.post(`/api/etapes/`, action, {'Content-Type': 'application/json'})
+            ajax.post(`/api/etapes/`, action, headers())
                 .map(response => loadEtapes())
         );
 
 const removeEtapeEpic = action$ =>
     action$.ofType('REMOVE_ETAPE')
         .mergeMap(action =>
-            ajax.delete(`/api/etapes/${action.id}`, action, {'Content-Type': 'application/json'})
+            ajax.delete(`/api/etapes/${action.id}`, headers())
                 .map(response => loadEtapes())
         );
 
@@ -108,33 +133,75 @@ const cmp = (a, b) => {
     return 0;
 };
 
+
 const fetchEleveEpic = action$ =>
     action$.ofType('LOAD_ELEVES')
         .mergeMap(action =>
-            ajax.getJSON(`/api/eleves/`)
-                .map(response => elevesLoaded(response.sort((eleveA, eleveB) => cmp(eleveA.name, eleveB.name))))
-        );
+            ajax.getJSON(`/api/eleves/`, headers())
+        ).map(response => elevesLoaded(response.sort((eleveA, eleveB) => cmp(eleveA.name, eleveB.name))))
+;
 
 const postEleveEpic = action$ =>
     action$.ofType('ADD_ELEVE')
         .mergeMap(action =>
-            ajax.post(`/api/eleves/`, action, {'Content-Type': 'application/json'})
+            ajax.post(`/api/eleves/`, action, headers())
                 .map(response => loadEleves())
         );
 
 const updateEleveEpic = action$ =>
     action$.ofType('UPDATE_ELEVE')
         .mergeMap(action =>
-            ajax.put(`/api/eleves/${action.eleve._id}`, action.eleve, {'Content-Type': 'application/json'})
-                .map(response => loadEleves())
-        );
+            ajax.put(`/api/eleves/${action.eleve._id}`, action.eleve, headers())
+        ).map(response => loadEleves());
 
 const removeEleveEpic = action$ =>
     action$.ofType('REMOVE_ELEVE')
         .mergeMap(action =>
-            ajax.delete(`/api/eleves/${action.id}`, action, {'Content-Type': 'application/json'})
+            ajax.delete(`/api/eleves/${action.id}`, headers())
                 .map(response => loadEleves())
         );
+
+const connectUserEpic = action$ =>
+    action$.ofType('SIGN_IN')
+        .mergeMap(action =>
+            ajax.post(`/api/users/signin`, action, {'Content-Type': 'application/json'})
+                .map(data => {
+                    sessionStorage.setItem('jwtToken', data.response.token);
+                    return signInOk(data.response.user, data.response.token)
+                })
+                .catch(error => of(signInKo()))
+        );
+
+const createUserEpic = action$ =>
+    action$.ofType('SIGN_UP')
+        .mergeMap(action =>
+            ajax.post(`/api/users/signUP`, action, {'Content-Type': 'application/json'})
+                .map(data => {
+                    sessionStorage.setItem('jwtToken', data.response.token);
+                    return signInOk(data.response.user, data.response.token)
+                })
+                .catch(error => of(signInKo()))
+        );
+
+const disconnectUserEpic = action$ =>
+    action$.ofType('SIGN_OUT')
+        .map(action => {
+                sessionStorage.removeItem('jwtToken');
+                return push("/login")
+            }
+        );
+
+const redirectUserEpic = action$ =>
+    action$.ofType('SIGN_IN_OK')
+        .map(action => push("/home")
+        );
+
+const fetchMeEpic = action$ =>
+    action$.ofType('ME')
+        .mergeMap(action =>
+            ajax.getJSON(`/api/users/me`, headers())
+        ).map(response => meLoaded(response))
+;
 
 export const rootEpic = combineEpics(
     //Domaine
@@ -153,7 +220,13 @@ export const rootEpic = combineEpics(
     fetchEleveEpic,
     removeEleveEpic,
     postEleveEpic,
-    updateEleveEpic
+    updateEleveEpic,
+    //User
+    connectUserEpic,
+    createUserEpic,
+    disconnectUserEpic,
+    redirectUserEpic,
+    fetchMeEpic
 );
 
 

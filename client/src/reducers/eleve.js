@@ -3,7 +3,8 @@ const eleve = (state = {}, action) => {
         case 'ADD_ELEVE':
             return {
                 ...state,
-                name : action.name
+                name : action.name,
+                userId : action.userId
             };
         case 'MASTER_COMPETENCE' :
             return {
@@ -23,13 +24,28 @@ const eleve = (state = {}, action) => {
     }
 };
 
+const cmp = (a, b) => {
+    if (a < b) {
+        return -1;
+    }
+    if (a > b) {
+        return 1;
+    }
+    return 0;
+};
+
 const eleves = (state = [], action) => {
     switch (action.type) {
         case 'ADD_ELEVE':
             return [
                 ...state,
                 eleve({}, action)
-            ];
+            ].sort((eleveA, eleveB) => cmp(eleveA.name, eleveB.name));
+        case 'UPDATE_ELEVE':
+            return [
+                ...state.filter(eleve => eleve._id !== action.eleve._id),
+               action.eleve
+            ].sort((eleveA, eleveB) => cmp(eleveA.name, eleveB.name));
         case 'ELEVES_LOADED':
             return action.eleves;
         default :

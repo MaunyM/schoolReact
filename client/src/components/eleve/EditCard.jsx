@@ -3,14 +3,14 @@ import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
 import {addEleve, changeField, cancelForm} from '../../actions'
 
-const EleveEditCard = ({edit, name, onChange, onEdit}) => (
+const EleveEditCard = ({edit, name, user, onChange, onEdit}) => (
     <Card>
         <Card.Content>
             <Card.Header>
                 Ajouter un eleve
             </Card.Header>
             <Card.Description>
-                <Form onSubmit={event => onEdit(name)}>
+                <Form onSubmit={event => onEdit(name, user._id)}>
                     <Form.Group inline>
                         <Form.Input name='name' className="nameField"
                                     onChange={onChange} value={name}
@@ -25,14 +25,16 @@ const EleveEditCard = ({edit, name, onChange, onEdit}) => (
 
 export default connect(
     (state, ownProps) => ({
+        user: state.user,
         name: state.form['eleve'].name,
     }),
     (dispatch) => ({
         onChange: (e, {name, value}) => {
             dispatch(changeField('eleve', name, value))
         },
-        onEdit: (name) => {
-            dispatch(addEleve(name));
+        onEdit: (name, userId) => {
+            console.log(name, userId);
+            dispatch(addEleve(name, userId));
             dispatch(cancelForm('eleve'))
         }
     })

@@ -25,7 +25,7 @@ const EleveContainer = ({eleves, etapes, onRemoveClick, goTo}) => (
                                                       progress={eleve.master && progress(eleve, etapes)}
                                                       header={eleve.name}
                                                       _id={eleve._id}
-                                                      onClick={() => goTo(`eleve/${eleve._id}/domaines`)}/>)
+                                                      onClick={() => goTo(`/home/eleve/${eleve._id}/domaines`)}/>)
             }
             <EleveEditCard/>
         </Card.Group>

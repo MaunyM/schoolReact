@@ -31,7 +31,7 @@ const DomaineContainer = ({domaines, eleve, competences, onRemoveClick, goTo, et
                                                           progress={eleve && progress(eleve, etapeFromDomaine(domaine, competences, etapes))}
                                                           header={domaine.name}
                                                           _id={domaine._id}
-                                                          onClick={() => goTo(`/eleve/${eleve._id}/domaine/${domaine._id}`)}/>)}
+                                                          onClick={() => goTo(`/home/eleve/${eleve._id}/domaine/${domaine._id}`)}/>)}
             <DomaineEditCard/>
         </Card.Group>
     </div>
