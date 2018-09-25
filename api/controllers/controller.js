@@ -16,6 +16,7 @@ const bind = (resource) => ({
     },
 
     create: (req, res) => {
+        console.log('create');
         if (!req.user) return forbidden(res);
         const new_resource = new resource(req.body);
         new_resource.save((err, resource) => {

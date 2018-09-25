@@ -33,11 +33,6 @@ app.set('port', (process.env.PORT || 3001));
 app.use(bodyParser.json());
 app.use(jwt.verify);
 
-// Express only serves static assets in production
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('client/build'));
-}
-
 const adddRoute = (app, controller) => {
     app.route(`/api/${controller.resource.endpoint}`)
         .get(controller.get_all)
@@ -57,6 +52,19 @@ app.route(`/api/${UsersController.resource.endpoint}/signup`).post(UsersControll
 app.route(`/api/${UsersController.resource.endpoint}/signin`).post(UsersController.signin);
 app.route(`/api/${UsersController.resource.endpoint}/me`).get(UsersController.me);
 adddRoute(app, UsersController);
+
+// Express only serves static assets in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+
+    app.get('/*', function (req, res) {
+        res.sendFile(path.join(__dirname, 'client/build/index.html'), function (err) {
+            if (err) {
+                res.status(500).send(err);
+            }
+        });
+    });
+}
 
 app.listen(app.get('port'), () => {
     console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console

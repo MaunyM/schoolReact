@@ -67,7 +67,7 @@ const fetchDomaineEpic = action$ =>
 const postDomaineEpic = action$ =>
     action$.ofType('ADD_DOMAINE')
         .mergeMap(action =>
-            ajax.post(`/api/domaines/`, headers())
+            ajax.post(`/api/domaines/`, action, headers())
                 .map(response => loadDomaines())
         );
 
