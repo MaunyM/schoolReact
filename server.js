@@ -1,6 +1,7 @@
 require("babel-register");
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const jwt = require('./jwt');
 
