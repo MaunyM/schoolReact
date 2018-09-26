@@ -14,14 +14,11 @@ const generateToken = (user) => {
 };
 
 const verify = (req, res, next) => {
-    console.log('verify start');
     let token = req.headers.authorization;
     if (!token) return next();
-    console.log('verify token : ', token);
     token = token.replace('Bearer ', '');
     jwt.verify(token, SECRET, (err, user) => {
         if (err) {
-            console.log(err);
             return res.status(401).json({
                 success: false,
                 message: 'Please register Log in'
