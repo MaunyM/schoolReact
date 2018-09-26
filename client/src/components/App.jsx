@@ -18,6 +18,8 @@ class AppContainer extends React.Component {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) {
             goTo('/login')
+        } else {
+            goTo('/home')
         }
     }
 

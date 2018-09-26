@@ -30,7 +30,7 @@ const CompetenceContainer = ({domaine, competences, etapes, eleve, onRemoveClick
                             onRemoveClick={onRemoveClick}
                             progress={eleve && progress(eleve, etapeFromCompetence(competence, etapes))}
                             header={competence.description}
-                            _id={eleve._id}
+                            _id={competence._id}
                             onClick={() => goTo(`/home/eleve/${eleve && eleve._id}/competence/${competence._id}`)}/>)
             }
             <CompetenceEditCard domaine={domaine}/>
