@@ -3,21 +3,8 @@ const eleve = (state = {}, action) => {
         case 'ADD_ELEVE':
             return {
                 ...state,
-                name : action.name,
-                userId : action.userId
-            };
-        case 'MASTER_COMPETENCE' :
-            return {
-                ...state,
-                master: [
-                    ...state.master,
-                    action.code
-                ]
-            };
-        case 'UNMASTER_COMPETENCE' :
-            return {
-                ...state,
-                master: state.master.filter(competence => competence !== action.code)
+                name: action.name,
+                userId: action.userId
             };
         default :
             return state
@@ -44,7 +31,7 @@ const eleves = (state = [], action) => {
         case 'UPDATE_ELEVE':
             return [
                 ...state.filter(eleve => eleve._id !== action.eleve._id),
-               action.eleve
+                action.eleve
             ].sort((eleveA, eleveB) => cmp(eleveA.name, eleveB.name));
         case 'ELEVES_LOADED':
             return action.eleves;

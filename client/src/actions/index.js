@@ -36,6 +36,7 @@ export const hideSidebar = () => ({type: 'SIDEBAR_HIDE'});
 //Forms
 export const changeField = (form, field, value) => ({type: 'CHANGE_FIELD', form, value, field});
 export const cancelForm = (form) => ({type: 'CANCEL_FORM', form});
+export const editForm = (form, current) => ({type: 'EDIT_FORM', form, current});
 
 //User
 export const signIn = (name, password) => ({type: 'SIGN_IN', name, password});
