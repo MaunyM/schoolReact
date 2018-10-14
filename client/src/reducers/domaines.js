@@ -20,6 +20,11 @@ const domaines = (state = [], action) => {
                 ...state,
                 domaine({}, action)
             ];
+        case 'UPDATE_DOMAINE':
+            return [
+                ...state.filter(domaine => domaine._id !== action.domaine._id),
+                action.domaine
+            ];
         default :
             return state
     }

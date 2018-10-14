@@ -29,7 +29,6 @@ export default connect(
         user: state.user,
         isEdit: state.form['eleve']._id,
         eleve: state.form['eleve'],
-        name: state.form['eleve'].name,
     }),
     (dispatch) => ({
         onChange: (e, {name, value}) => {
@@ -43,7 +42,6 @@ export default connect(
                 if (eleve._id) {
                     dispatch(updateEleve(eleve));
                 } else {
-                    console.log(eleve, userId);
                     dispatch(addEleve(eleve.name, userId));
                 }
                 dispatch(cancelForm('eleve'))

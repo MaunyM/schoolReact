@@ -8,7 +8,7 @@ import {push} from 'react-router-redux'
 import SchoolCard from '../common/Card'
 import CompetenceEditCard from './EditCard'
 import SchoolStep from '../layout/Step';
-import {removeCompetence} from '../../actions'
+import {editForm, removeCompetence} from '../../actions'
 
 import './container.css'
 
@@ -21,13 +21,14 @@ const etapeFromCompetence = (competence, etapes) => {
     return etapes.filter(etape => competence._id === etape.competenceId)
 };
 
-const CompetenceContainer = ({domaine, competences, etapes, eleve, onRemoveClick, goTo}) => (
+const CompetenceContainer = ({domaine, competences, etapes, eleve, onRemoveClick, onEditClick, goTo}) => (
     <div className="competence">
         <SchoolStep eleve={eleve} domaine={domaine}/>
         <Card.Group>
             {competences.map((competence, count) =>
                 <SchoolCard key={count}
                             onRemoveClick={onRemoveClick}
+                            onEditClick={onEditClick(competence)}
                             progress={eleve && progress(eleve, etapeFromCompetence(competence, etapes))}
                             header={competence.description}
                             _id={competence._id}
@@ -50,6 +51,9 @@ export default connect(
     dispatch => ({
         goTo: url => {
             dispatch(push(url))
+        },
+        onEditClick: (competence) => () => {
+            dispatch(editForm('competence', competence))
         },
         onRemoveClick: (id) => {
             dispatch(removeCompetence(id))

@@ -1,21 +1,22 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
-import {addDomaine, changeField, cancelForm} from '../../actions'
+import {addDomaine, changeField, cancelForm, updateDomaine} from '../../actions'
 
 import './editCard.css'
 
-const DomaineEditCard = ({edit, name, code, onChange, onEdit}) => (
+const DomaineEditCard = ({edit, isEdit, domaine, onChange, onSubmit, onCancel}) => (
     <Card className="editDomaine">
         <Card.Content>
             <Card.Header>
-                Ajouter un domaine
+                {isEdit ? 'Modifier un domaine' : 'Ajouter un domaine'}
             </Card.Header>
             <Card.Description>
-                <Form onSubmit={event => onEdit(name, code)}>
+                <Form onSubmit={event => onSubmit(domaine)}>
                     <Form.Group inline>
-                        <Form.Input name='name' className="nameField"
-                                    onChange={onChange} value={name}
+                        {isEdit && <Button icon onClick={onCancel}><Icon name='cancel' link/></Button>}
+                        <Form.Input name='name' className={`${isEdit ? 'editField' : 'nameField'}`}
+                                    onChange={onChange} value={domaine.name}
                                     placeholder='Nom...'/>
                         <Button icon type='submit'><Icon name='add' link/></Button>
                     </Form.Group>
@@ -28,16 +29,23 @@ const DomaineEditCard = ({edit, name, code, onChange, onEdit}) => (
 export default connect(
     (state, ownProps) => ({
         domaines: state.domaines,
-        name: state.form['domaine'].name,
-        code: state.form['domaine'].code
+        isEdit: state.form['domaine']._id,
+        domaine: state.form['domaine'],
     }),
     (dispatch) => ({
         onChange: (e, {name, value}) => {
             dispatch(changeField('domaine', name, value))
         },
-        onEdit: (name, code) => {
+        onCancel: () => {
             dispatch(cancelForm('domaine'));
-            dispatch(addDomaine(name, code))
+        },
+        onSubmit: (domaine) => {
+            if (domaine._id) {
+                dispatch(updateDomaine(domaine));
+            } else {
+                dispatch(addDomaine(domaine.name, domaine.code));
+            }
+            dispatch(cancelForm('domaine'));
         }
     })
 )(DomaineEditCard);

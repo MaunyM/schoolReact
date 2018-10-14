@@ -12,16 +12,19 @@ export const loadDomaines = () => ({type: 'LOAD_DOMAINES'});
 export const addDomaine = (name, code) => ({type: 'ADD_DOMAINE', name, code});
 export const removeDomaine = (id) => ({type: 'REMOVE_DOMAINE', id});
 export const domainesLoaded = (domaines) => ({type: 'DOMAINES_LOADED', domaines});
+export const updateDomaine = (domaine) => ({type: 'UPDATE_DOMAINE', domaine});
 
 export const loadCompetences = () => ({type: 'LOAD_COMPETENCES'});
 export const addCompetence = (domaineId, description) => ({type: 'ADD_COMPETENCE', description, domaineId});
 export const removeCompetence = (id) => ({type: 'REMOVE_COMPETENCE', id});
 export const competencesLoaded = (competences) => ({type: 'COMPETENCES_LOADED', competences});
+export const updateCompetence = (competence) => ({type: 'UPDATE_COMPETENCE', competence});
 
 export const loadEtapes = () => ({type: 'LOAD_ETAPES'});
 export const addEtape = (competenceId, description) => ({type: 'ADD_ETAPE', description, competenceId});
 export const removeEtape = (id) => ({type: 'REMOVE_ETAPE', id});
 export const etapesLoaded = (etapes) => ({type: 'ETAPES_LOADED', etapes});
+export const updateEtape = (etape) => ({type: 'UPDATE_ETAPE', etape});
 
 export const loadEleves = () => ({type: 'LOAD_ELEVES'});
 export const addEleve = (name, userId) => ({type: 'ADD_ELEVE', name, userId});
@@ -79,6 +82,12 @@ const removeDomaineEpic = action$ =>
                 .map(response => loadDomaines())
         );
 
+const updateDomaineEpic = action$ =>
+    action$.ofType('UPDATE_DOMAINE')
+        .mergeMap(action =>
+            ajax.put(`/api/domaines/${action.domaine._id}`, action.domaine, headers())
+        ).map(response => loadDomaines());
+
 const fetchCompetenceEpic = action$ =>
     action$.ofType('LOAD_COMPETENCES')
         .mergeMap(action =>
@@ -100,6 +109,12 @@ const removeCompetenceEpic = action$ =>
             ajax.delete(`/api/competences/${action.id}`, headers())
                 .map(response => loadCompetences())
         );
+
+const updateCompetenceEpic = action$ =>
+    action$.ofType('UPDATE_COMPETENCE')
+        .mergeMap(action =>
+            ajax.put(`/api/competences/${action.competence._id}`, action.competence, headers())
+        ).map(response => loadCompetences());
 
 const fetchEtapeEpic = action$ =>
     action$.ofType('LOAD_ETAPES')
@@ -123,6 +138,12 @@ const removeEtapeEpic = action$ =>
             ajax.delete(`/api/etapes/${action.id}`, headers())
                 .map(response => loadEtapes())
         );
+
+const updateEtapeEpic = action$ =>
+    action$.ofType('UPDATE_ETAPE')
+        .mergeMap(action =>
+            ajax.put(`/api/etapes/${action.etape._id}`, action.etape, headers())
+        ).map(response => loadEtapes());
 
 const cmp = (a, b) => {
     if (a < b) {
@@ -209,14 +230,17 @@ export const rootEpic = combineEpics(
     fetchDomaineEpic,
     removeDomaineEpic,
     postDomaineEpic,
+    updateDomaineEpic,
     //Competence
     fetchCompetenceEpic,
     removeCompetenceEpic,
     postCompetenceEpic,
+    updateCompetenceEpic,
     //Etape
     fetchEtapeEpic,
     removeEtapeEpic,
     postEtapeEpic,
+    updateEtapeEpic,
     //Eleve
     fetchEleveEpic,
     removeEleveEpic,
