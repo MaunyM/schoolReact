@@ -8,8 +8,6 @@ import Login from './user/Login';
 import Signup from './user/Signup';
 import Home from './Home';
 
-import {me} from '../actions'
-
 import './app.css'
 
 class AppContainer extends React.Component {

@@ -1,20 +1,22 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
-import {addCompetence, changeField, cancelForm} from '../../actions'
+import {addCompetence, changeField, cancelForm, updateCompetence} from '../../actions'
 
 import './editCard.css'
 
-const CompetenceEditCard = ({domaine, description, onEdit, onChange}) => (
+const CompetenceEditCard = ({isEdit, domaine, competence, onEdit, onChange, onCancel}) => (
     <Card className="editCompetence">
         <Card.Content>
             <Card.Header>
-                Ajouter une compétence
+                {isEdit ? 'Modifier une compétence' : 'Ajouter une compétence'}
             </Card.Header>
             <Card.Description>
-                <Form onSubmit={event => onEdit(domaine, description)}>
+                <Form onSubmit={event => onEdit(domaine, competence)}>
                     <Form.Group inline>
-                        <Form.TextArea name='description' rows={2} onChange={onChange} value={description}
+                        {isEdit && <Button icon onClick={onCancel}><Icon name='cancel' link/></Button>}
+                        <Form.TextArea name='description' rows={2} onChange={onChange}
+                                       value={competence.description}
                                        placeholder='Description...'/>
                         <Button icon type='submit'><Icon name='add' link/></Button>
                     </Form.Group>
@@ -26,15 +28,23 @@ const CompetenceEditCard = ({domaine, description, onEdit, onChange}) => (
 
 export default connect(
     (state, ownProps) => ({
-        description: state.form['competence'].description,
+        isEdit: state.form['competence']._id,
+        competence: state.form['competence'],
     }),
     dispatch => ({
         onChange: (e, {name, value}) => {
             dispatch(changeField('competence', name, value))
         },
-        onEdit: (domaine, description) => {
+        onCancel: () => {
+            dispatch(cancelForm('competence'))
+        },
+        onEdit: (domaine, competence) => {
+            if (competence._id) {
+                dispatch(updateCompetence(competence));
+            } else {
+                dispatch(addCompetence(domaine._id, competence.description));
+            }
             dispatch(cancelForm('competence'));
-            dispatch(addCompetence(domaine._id, description))
         }
     })
 )(CompetenceEditCard);

@@ -8,7 +8,7 @@ import {push} from 'react-router-redux'
 import SchoolCard from '../common/Card'
 import EleveEditCard from './EditCard'
 import SchoolStep from '../layout/Step';
-import {removeEleve} from '../../actions'
+import {editForm, removeEleve} from '../../actions'
 
 import './container.css'
 
@@ -16,12 +16,13 @@ const progress = (eleve, etapes) => {
     return (100 / etapes.length) * eleve.master.length
 };
 
-const EleveContainer = ({eleves, etapes, onRemoveClick, goTo}) => (
+const EleveContainer = ({eleves, etapes, onRemoveClick, onEditClick, goTo}) => (
     <div>
         <SchoolStep/>
         <Card.Group>
             {eleves.map((eleve, count) => <SchoolCard key={count}
                                                       onRemoveClick={onRemoveClick}
+                                                      onEditClick={onEditClick(eleve)}
                                                       progress={eleve.master && progress(eleve, etapes)}
                                                       header={eleve.name}
                                                       _id={eleve._id}
@@ -44,5 +45,8 @@ export default connect(
         onRemoveClick: (id) => {
             dispatch(removeEleve(id))
         },
+        onEditClick: (eleve) => () =>{
+            dispatch(editForm('eleve', eleve))
+        }
     })
 )(EleveContainer);

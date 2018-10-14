@@ -1,19 +1,20 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Card, Form, Icon, Button} from 'semantic-ui-react'
-import {addEleve, changeField, cancelForm} from '../../actions'
+import {addEleve, changeField, cancelForm, updateEleve} from '../../actions'
 
-const EleveEditCard = ({edit, name, user, onChange, onEdit}) => (
+const EleveEditCard = ({edit, eleve, user, onChange, onSubmit, onCancel, isEdit}) => (
     <Card>
         <Card.Content>
             <Card.Header>
-                Ajouter un eleve
+                {isEdit ? 'Modifier un eleve' : 'Ajouter un eleve'}
             </Card.Header>
             <Card.Description>
-                <Form onSubmit={event => onEdit(name, user._id)}>
+                <Form onSubmit={event => onSubmit(eleve, user._id)}>
                     <Form.Group inline>
-                        <Form.Input name='name' className="nameField"
-                                    onChange={onChange} value={name}
+                        {isEdit && <Button icon onClick={onCancel}><Icon name='cancel' link/></Button>}
+                        <Form.Input name='name' className={`${isEdit ? 'editField' : 'nameField'}`}
+                                    onChange={onChange} value={eleve.name}
                                     placeholder='Nom...'/>
                         <Button icon type='submit'><Icon name='add' link/></Button>
                     </Form.Group>
@@ -26,16 +27,25 @@ const EleveEditCard = ({edit, name, user, onChange, onEdit}) => (
 export default connect(
     (state, ownProps) => ({
         user: state.user,
-        name: state.form['eleve'].name,
+        isEdit: state.form['eleve']._id,
+        eleve: state.form['eleve'],
     }),
     (dispatch) => ({
         onChange: (e, {name, value}) => {
             dispatch(changeField('eleve', name, value))
         },
-        onEdit: (name, userId) => {
-            console.log(name, userId);
-            dispatch(addEleve(name, userId));
+        onCancel: () => {
             dispatch(cancelForm('eleve'))
+        },
+        onSubmit: (eleve, userId) => {
+            if (eleve.name) {
+                if (eleve._id) {
+                    dispatch(updateEleve(eleve));
+                } else {
+                    dispatch(addEleve(eleve.name, userId));
+                }
+                dispatch(cancelForm('eleve'))
+            }
         }
     })
 )(EleveEditCard);

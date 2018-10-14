@@ -6,3 +6,7 @@
 .link {
     cursor: pointer;
 }
+
+.ui.form .field.editField .ui.input input {
+    width: 168px;
+}

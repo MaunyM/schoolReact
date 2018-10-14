@@ -23,6 +23,11 @@ const form = (state = defaultState, action) => {
                 ...state,
                 [action.form]: {...defaultState[action.form]}
             };
+        case 'EDIT_FORM':
+            return {
+                ...state,
+                [action.form]: action.current
+            };
         default:
             return state
     }

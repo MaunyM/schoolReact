@@ -6,7 +6,7 @@ import SchoolCard from '../common/Card'
 import EtapeEditCard from './EditCard'
 import SchoolStep from '../layout/Step';
 
-import {removeEtape, updateEleve} from '../../actions'
+import {editForm, removeEtape, updateEleve} from '../../actions'
 
 import './container.css'
 
@@ -17,7 +17,7 @@ const competenceFromId = (state, id) => {
 const hasCompetence = (eleve, id) => {
     return eleve && eleve.master.includes(id);
 };
-const EtapeContainer = ({competence, domaine, etapes, eleve, onEtapeClicked, onRemoveClick}) => (
+const EtapeContainer = ({competence, domaine, etapes, eleve, onEtapeClicked, onEditClick, onRemoveClick}) => (
     <div className="etape">
         <SchoolStep eleve={eleve} competence={competence} domaine={domaine}/>
         <div>
@@ -27,6 +27,7 @@ const EtapeContainer = ({competence, domaine, etapes, eleve, onEtapeClicked, onR
                     etapes.map((etape, count) =>
                         <SchoolCard key={count}
                                     onRemoveClick={onRemoveClick}
+                                    onEditClick={onEditClick(etape)}
                                     onClick={() => onEtapeClicked(etape._id, eleve)}
                                     header={etape.description}
                                     _id={etape._id}
@@ -57,6 +58,9 @@ export default connect(
                 eleve = {...eleve, master: [...eleve.master, id]}
             }
             dispatch(updateEleve(eleve))
+        },
+        onEditClick: (etape) => () => {
+            dispatch(editForm('etape', etape))
         },
         onRemoveClick: (id) => {
             dispatch(removeEtape(id))

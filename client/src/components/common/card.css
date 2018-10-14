@@ -3,20 +3,20 @@
     height: 106px;
 }
 
-.schoolCard.card .icon {
+.schoolCard.card .icons {
     display: none;
-}
-
-.schoolCard.card:hover .icon {
-    display: inline;
     position: absolute;
     right: 10px;
+}
+
+.schoolCard.card:hover .icons {
+    display: flex;
+}
+
+.schoolCard.card:hover .icons .icon {
     color: darkgrey;
 }
 
-.schoolCard.card .icon:hover {
-    display: inline;
-    position: fixed;
-    right: 10px;
+.schoolCard.card:hover .icons .icon:hover {
     color: black;
 }
